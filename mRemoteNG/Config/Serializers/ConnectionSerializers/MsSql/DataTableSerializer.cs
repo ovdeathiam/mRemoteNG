@@ -108,6 +108,7 @@ namespace mRemoteNG.Config.Serializers.ConnectionSerializers.MsSql
             dataTable.Columns.Add("Username", typeof(string));
             dataTable.Columns.Add("Domain", typeof(string));
             dataTable.Columns.Add("Password", typeof(string));
+            dataTable.Columns.Add("Favorite", typeof(string));
             dataTable.Columns.Add("Hostname", typeof(string));
             dataTable.Columns.Add("Port", typeof(int));
             dataTable.Columns.Add("Protocol", typeof(string));
@@ -167,6 +168,7 @@ namespace mRemoteNG.Config.Serializers.ConnectionSerializers.MsSql
             dataTable.Columns.Add("InheritDisplayWallpaper", typeof(bool));
             dataTable.Columns.Add("InheritEnableFontSmoothing", typeof(bool));
             dataTable.Columns.Add("InheritEnableDesktopComposition", typeof(bool));
+            dataTable.Columns.Add("InheritFavorite", typeof(bool));
             dataTable.Columns.Add("InheritDisableFullWindowDrag", typeof(bool));
             dataTable.Columns.Add("InheritDisableMenuAnimations", typeof(bool));
             dataTable.Columns.Add("InheritDisableCursorShadow", typeof(bool));
@@ -267,7 +269,7 @@ namespace mRemoteNG.Config.Serializers.ConnectionSerializers.MsSql
             dataRow["Domain"].Equals(_saveFilter.SaveDomain ? connectionInfo.Domain : "");
 
             isFieldNotChange = isFieldNotChange && dataRow["Hostname"].Equals(connectionInfo.Hostname);
-             isFieldNotChange = isFieldNotChange && dataRow["VmId"].Equals(connectionInfo.VmId);
+            isFieldNotChange = isFieldNotChange && dataRow["VmId"].Equals(connectionInfo.VmId);
             isFieldNotChange = isFieldNotChange && dataRow["Protocol"].Equals(connectionInfo.Protocol.ToString());
             isFieldNotChange = isFieldNotChange && dataRow["PuttySession"].Equals(connectionInfo.PuttySession);
             isFieldNotChange = isFieldNotChange &&
@@ -512,6 +514,7 @@ namespace mRemoteNG.Config.Serializers.ConnectionSerializers.MsSql
             dataRow["Password"] = _saveFilter.SavePassword
                 ? _cryptographyProvider.Encrypt(connectionInfo.Password, _encryptionKey)
                 : "";
+            dataRow["Favorite"] = false;
             dataRow["Hostname"] = connectionInfo.Hostname;
             dataRow["VmId"] = connectionInfo.VmId;
             dataRow["Protocol"] = connectionInfo.Protocol;
@@ -590,6 +593,7 @@ namespace mRemoteNG.Config.Serializers.ConnectionSerializers.MsSql
                 dataRow["InheritDisableCursorShadow"] = connectionInfo.Inheritance.DisableCursorShadow;
                 dataRow["InheritDisableCursorBlinking"] = connectionInfo.Inheritance.DisableCursorBlinking;
                 dataRow["InheritDomain"] = connectionInfo.Inheritance.Domain;
+                dataRow["InheritFavorite"] = connectionInfo.Inheritance.Favorite;
                 dataRow["InheritIcon"] = connectionInfo.Inheritance.Icon;
                 dataRow["InheritPanel"] = connectionInfo.Inheritance.Panel;
                 dataRow["InheritPassword"] = connectionInfo.Inheritance.Password;
