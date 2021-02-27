@@ -40,9 +40,19 @@ namespace mRemoteNG.Connection.Protocol.PowerShell
                     Padding = new Padding(0, 20, 0, 0)
                 };
 
-                _consoleControl.StartProcess(@"C:\Windows\system32\WindowsPowerShell\v1.0\PowerShell.exe",
-                    $@"-NoExit -Command ""$password = ConvertTo-SecureString '{_connectionInfo.Password}' -AsPlainText -Force; $cred = New-Object System.Management.Automation.PSCredential -ArgumentList @('{_connectionInfo.Domain}\{_connectionInfo.Username}', $password); Enter-PSSession -ComputerName {_connectionInfo.Hostname} -Credential $cred""");
-                
+                if (!Force.HasFlag(ConnectionInfo.Force.NoCredentials)
+                    && _connectionInfo?.Password?.Length > 0
+                    && _connectionInfo?.Username?.Length > 0)
+                {
+                    _consoleControl.StartProcess(@"C:\Windows\system32\WindowsPowerShell\v1.0\PowerShell.exe",
+                                                 $@"-NoExit -Command ""Enter-PSSession -ComputerName {_connectionInfo.Hostname} -Credential (New-Object System.Management.Automation.PSCredential -ArgumentList @('{_connectionInfo.Domain}\{_connectionInfo.Username}', (ConvertTo-SecureString '{_connectionInfo.Password}' -AsPlainText -Force)))""");
+                }
+                else
+                {
+                    _consoleControl.StartProcess(@"C:\Windows\system32\WindowsPowerShell\v1.0\PowerShell.exe",
+                                                 $@"-NoExit -Command ""Enter-PSSession -ComputerName {_connectionInfo.Hostname} -Credential (Get-Credential)""");
+                }
+
                 while (!_consoleControl.IsHandleCreated) break;
                 _handle = _consoleControl.Handle;
                 NativeMethods.SetParent(_handle, InterfaceControl.Handle);
