@@ -52,25 +52,16 @@ namespace mRemoteNG.Config.DataProviders
                         sqlCommand.Connection = sqlConnection;
                         sqlCommand.Transaction = transaction;
                         sqlCommand.CommandText = "SELECT * FROM tblCons";
-                        using (SqlDataAdapter dataAdpater = new SqlDataAdapter())
+                        using (SqlDataAdapter dataAdapter = new SqlDataAdapter(sqlCommand))
                         {
-                            dataAdpater.SelectCommand = sqlCommand;
-
-                            SqlCommandBuilder builder = new SqlCommandBuilder(dataAdpater);
-                            // Avoid optimistic concurrency, check if it is necessary.
-                            builder.ConflictOption = ConflictOption.OverwriteChanges;
-
-                            dataAdpater.UpdateCommand = builder.GetUpdateCommand();
-
-                            dataAdpater.DeleteCommand = builder.GetDeleteCommand();
-                            dataAdpater.InsertCommand = builder.GetInsertCommand();
-
-                            dataAdpater.Update(dataTable);
-                            transaction.Commit();
+                            using (SqlCommandBuilder cb = new SqlCommandBuilder(dataAdapter))
+                            {
+                                dataAdapter.Update(dataTable);
+                                transaction.Commit();
+                            }
                         }
                     }
                 }
-
             }
             else if (DatabaseConnector.GetType() == typeof(MySqlDatabaseConnector))
             {
