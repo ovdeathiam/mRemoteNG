@@ -137,7 +137,6 @@
         <xs:attribute name="InheritUseConsoleSession" type="xs:boolean" use="optional" />
         <xs:attribute name="InheritRenderingEngine" type="xs:boolean" use="optional" />
         <xs:attribute name="InheritUsername" type="xs:boolean" use="optional" />
-        <xs:attribute name="InheritICAEncryptionStrength" type="xs:boolean" use="optional" />
         <xs:attribute name="InheritRDPAuthenticationLevel" type="xs:boolean" use="optional" />
         <xs:attribute name="InheritRDPMinutesToIdleTimeout" type="xs:boolean" use="optional" />
         <xs:attribute name="InheritRDPAlertIdleTimeout" type="xs:boolean" use="optional" />
